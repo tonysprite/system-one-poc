@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Node / DSH workspace
+node_modules/
+*.log
+.DS_Store
+
+# Generated / local-only artifacts
+calibration/results.json
+calibration/approval-history.jsonl
