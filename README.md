@@ -95,6 +95,11 @@ TS 层依赖 DSH 的 `@deepseek-ai/*` 内部包
 tsconfig paths 解析到源码）。在没有 DSH 的环境里，TS 文件是**参考/集成示例**：展示
 每个 hook 怎么挂、决策怎么回流。
 
+> ✅ **正式接入（自动加载）**：`bundle/` 已是声明了 `dsh.bundle.patch` 的正式 bundle，
+> 装入 profile 后每次会话启动自动挂载（无需手动跑 driver）。安装/常驻/验证/回滚/
+> 运维见 **[`OPS.md`](./OPS.md)**。三态判定、工具压缩、审批回流仍依赖
+> `127.0.0.1:8787` 的 laya sidecar，sidecar 不在时 fail-open。
+
 挂载方式（DSH 插件）：
 
 ```ts

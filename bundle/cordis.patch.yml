@@ -1,0 +1,40 @@
+# @tonysprite/system-one-poc bundle patch.
+#
+# Inserted over the base stack for every session of a profile that lists this
+# bundle. All three rows are HOST-plane rows: they listen on agent-scoped
+# events (`tools/pre-execute`, `system-prompt/assemble`) which propagate to
+# ancestors, exactly like the in-box `repeat-tool-reminder` guard.
+#
+# To stop any single row (without uninstalling the bundle), remove or
+# `disabled: true` it here; dsh hot-reloads the profile's patch layers, so
+# the change is live on the next recomposition.
+
+- insert:
+    # allow/ask/deny gate for every tool call (laya sidecar /risk; fail-open).
+    - id: system-one-guard
+      name: '@tonysprite/system-one-poc/guard'
+      config:
+        sidecarBaseUrl: http://127.0.0.1:8787
+
+    # Request-side tool-set compression (laya sidecar /shortlist; fail-open).
+    # Conservative defaults: compress only when > minToolsToCompress, keep
+    # topK plus the protect set. Ordering quality is POC-grade — see the
+    # bundle README before tightening topK.
+    - id: system-one-shortlist
+      name: '@tonysprite/system-one-poc/shortlist'
+      config:
+        sidecarBaseUrl: http://127.0.0.1:8787
+        topK: 6
+        minToolsToCompress: 8
+        protect:
+          - bash
+          - read
+          - write
+          - edit
+
+    # Approval funnel capture: appends every human decision on approval/request
+    # to a JSONL for re-calibrating the guard's operating point.
+    - id: approval-logger
+      name: '@tonysprite/system-one-poc/approval-logger'
+      config:
+        outputPath: /Users/tonysprite/projects/github.com/tonysprite/system-one-poc/calibration/approval-history.jsonl
